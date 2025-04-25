@@ -1,0 +1,37 @@
+<div class="map-container">
+
+  <div class="map-container">
+    <button class="upload-button" (click)="fileInput.click()">Upload Farmer</button>
+    <input #fileInput type="file" (change)="onFileChange($event)" hidden accept=".xls,.xlsx" />
+  
+    <p *ngIf="uploadMessage" [ngClass]="{'success': uploadSuccess, 'error': !uploadSuccess}">
+      {{ uploadMessage }}
+    </p>
+  
+  </div>
+  
+<google-map
+  [height]="'500px'"
+  [width]="'100%'"
+  [center]="mapCenter"
+  [zoom]="zoom"
+  (mapReady)="onMapReady($event)"
+>
+
+
+<map-marker
+*ngFor="let farmer of farmers; let i = index"
+[position]="{ lat: farmer.Latitude, lng: farmer.Longitude }"
+(mapClick)="onMarkerClick(farmer, markerRefs.get(i)!)"
+#marker
+></map-marker>
+
+\  <map-info-window #infoWindow>
+    <div *ngIf="selectedFarmer">
+      <p><strong>Water Level:</strong> {{ selectedFarmer['Water Level'] }}</p>
+      <p><strong>Mobile No:</strong> {{ selectedFarmer['Mobile No. Primary'] }}</p>
+     
+    </div>
+  </map-info-window>
+</google-map>
+</div>
